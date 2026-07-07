@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forno Rosa — Wood-Fired Pizzeria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --char:      #1C1815;
+    --char-2:    #241F1B;
+    --brick:     #B33F30;
+    --brick-2:   #8F2F23;
+    --cream:     #F2E8D8;
+    --cream-dim: #C9BFAF;
+    --gold:      #D9A441;
+    --olive:     #4A5240;
+
+    --display: 'Fraunces', serif;
+    --body: 'Work Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--char);
+    color:var(--cream);
+    font-family:var(--body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+
+  img,svg{ display:block; max-width:100%; }
+
+  .wrap{
+    max-width:1120px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  @media (max-width:640px){ .wrap{ padding:0 20px; } }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:50;
+    background:rgba(28,24,21,0.85);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid rgba(242,232,216,0.08);
+  }
+  .nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 32px;
+    max-width:1120px;
+    margin:0 auto;
+  }
+  @media (max-width:640px){ .nav{ padding:16px 20px; } }
+  .brand{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:1.25rem;
+    letter-spacing:0.02em;
+  }
+  .brand span{ color:var(--brick); font-style:italic; }
+  nav ul{
+    list-style:none;
+    display:flex;
+    gap:32px;
+  }
+  nav ul li a{
+    font-size:0.85rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--cream-dim);
+    transition:color .25s ease;
+  }
+  nav ul li a:hover, nav ul li a:focus-visible{ color:var(--gold); }
+  .nav-cta{
+    display:inline-block;
+    padding:9px 20px;
+    border:1px solid var(--brick);
+    border-radius:2px;
+    font-size:0.8rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--cream);
+    transition:background .25s ease, color .25s ease;
+  }
+  .nav-cta:hover, .nav-cta:focus-visible{ background:var(--brick); }
+  .nav-links{ display:flex; align-items:center; gap:32px; }
+  @media (max-width:800px){ .nav-links ul{ display:none; } }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:100svh;
+    display:flex;
+    align-items:center;
+    overflow:hidden;
+    padding-top:80px;
+  }
+
+  .oven-glow{
+    position:absolute;
+    inset:0;
+    z-index:0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 68%, rgba(179,63,48,0.55) 0%, rgba(179,63,48,0.0) 60%),
+      radial-gradient(ellipse 40% 35% at 50% 70%, rgba(217,164,65,0.35) 0%, rgba(217,164,65,0) 65%);
+    animation: emberPulse 6s ease-in-out infinite;
+  }
+  @keyframes emberPulse{
+    0%,100%{ opacity:0.75; }
+    50%{ opacity:1; }
+  }
+
+  .embers{ position:absolute; inset:0; z-index:1; pointer-events:none; }
+  .ember{
+    position:absolute;
+    bottom:0;
+    width:4px; height:4px;
+    border-radius:50%;
+    background:var(--gold);
+    opacity:0;
+    animation:rise 7s linear infinite;
+  }
+  @keyframes rise{
+    0%{ transform:translateY(0) translateX(0); opacity:0; }
+    10%{ opacity:0.9; }
+    100%{ transform:translateY(-70vh) translateX(var(--drift,20px)); opacity:0; }
+  }
+
+  .hero-inner{
+    position:relative;
+    z-index:2;
+    width:100%;
+    text-align:center;
+  }
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:0.78rem;
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:22px;
+  }
+
+  h1.wordmark{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(3.2rem, 10vw, 7.5rem);
+    line-height:0.95;
+    letter-spacing:-0.01em;
+  }
+  h1.wordmark em{
+    font-style:italic;
+    font-weight:500;
+    color:var(--brick);
+    display:block;
+    font-size:0.55em;
+    margin-top:6px;
+    letter-spacing:0;
+  }
+
+  .hero-sub{
+    max-width:480px;
+    margin:26px auto 0;
+    color:var(--cream-dim);
+    font-size:1.05rem;
+  }
+
+  .hero-ctas{
+    margin-top:38px;
+    display:flex;
+    justify-content:center;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .btn-primary, .btn-secondary{
+    padding:14px 30px;
+    border-radius:2px;
+    font-size:0.85rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    transition:all .25s ease;
+  }
+  .btn-primary{
+    background:var(--brick);
+    color:var(--cream);
+    border:1px solid var(--brick);
+  }
+  .btn-primary:hover, .btn-primary:focus-visible{ background:var(--brick-2); }
+  .btn-secondary{
+    border:1px solid rgba(242,232,216,0.3);
+    color:var(--cream);
+  }
+  .btn-secondary:hover, .btn-secondary:focus-visible{ border-color:var(--gold); color:var(--gold); }
+
+  .scroll-cue{
+    position:absolute;
+    bottom:28px;
+    left:50%;
+    transform:translateX(-50%);
+    font-family:var(--mono);
+    font-size:0.7rem;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--cream-dim);
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+  }
+  .scroll-cue .line{
+    width:1px; height:30px;
+    background:linear-gradient(var(--cream-dim), transparent);
+    animation:scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine{ 0%,100%{ opacity:0.3; } 50%{ opacity:1; } }
+
+  /* ---------- SECTION HEADERS ---------- */
+  .section{ padding:120px 0; }
+  @media (max-width:640px){ .section{ padding:80px 0; } }
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:20px;
+    margin-bottom:56px;
+    border-bottom:1px solid rgba(242,232,216,0.12);
+    padding-bottom:24px;
+  }
+  .section-head h2{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:clamp(2.2rem, 4vw, 3rem);
+  }
+  .section-tag{
+    font-family:var(--mono);
+    font-size:0.75rem;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--gold);
+    white-space:nowrap;
+  }
+
+  /* ---------- STORY ---------- */
+  .story{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:64px;
+    align-items:center;
+  }
+  @media (max-width:800px){ .story{ grid-template-columns:1fr; gap:36px; } }
+  .story p{
+    color:var(--cream-dim);
+    font-size:1.05rem;
+    margin-bottom:18px;
+    max-width:46ch;
+  }
+  .story .lede{
+    font-family:var(--display);
+    font-style:italic;
+    font-size:1.5rem;
+    color:var(--cream);
+    margin-bottom:22px;
+    max-width:20ch;
+  }
+  .oven-illustration{
+    background:var(--char-2);
+    border:1px solid rgba(242,232,216,0.08);
+    border-radius:4px;
+    aspect-ratio:4/3;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+
+  /* ---------- MENU ---------- */
+  .menu-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:56px 64px;
+  }
+  @media (max-width:800px){ .menu-grid{ grid-template-columns:1fr; gap:48px; } }
+  .menu-cat h3{
+    font-family:var(--display);
+    font-style:italic;
+    font-weight:500;
+    font-size:1.4rem;
+    color:var(--gold);
+    margin-bottom:22px;
+  }
+  .menu-item{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    padding:14px 0;
+    border-bottom:1px dotted rgba(242,232,216,0.18);
+  }
+  .menu-item:last-child{ border-bottom:none; }
+  .menu-item .name{
+    font-weight:500;
+    font-size:1.02rem;
+  }
+  .menu-item .desc{
+    display:block;
+    color:var(--cream-dim);
+    font-size:0.88rem;
+    margin-top:3px;
+    max-width:42ch;
+  }
+  .menu-item .filler{
+    flex:1;
+    border-bottom:1px dotted transparent;
+  }
+  .menu-item .price{
+    font-family:var(--mono);
+    font-size:0.95rem;
+    color:var(--cream);
+    white-space:nowrap;
+  }
+
+  /* ---------- HOURS / LOCATION ---------- */
+  .info{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:40px;
+  }
+  @media (max-width:800px){ .info{ grid-template-columns:1fr; gap:36px; } }
+  .info-card h4{
+    font-family:var(--mono);
+    font-size:0.75rem;
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:16px;
+  }
+  .info-card .row{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 0;
+    border-bottom:1px solid rgba(242,232,216,0.08);
+    font-size:0.95rem;
+    color:var(--cream-dim);
+  }
+  .info-card .row span:last-child{ color:var(--cream); }
+  .info-card p{
+    color:var(--cream-dim);
+    font-size:0.95rem;
+    margin-bottom:10px;
+  }
+
+  /* ---------- FOOTER / RESERVE ---------- */
+  footer{
+    background:var(--char-2);
+    border-top:1px solid rgba(242,232,216,0.08);
+    padding:80px 0 40px;
+    text-align:center;
+  }
+  footer h2{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:clamp(2rem, 5vw, 3.2rem);
+    margin-bottom:20px;
+  }
+  footer h2 em{ color:var(--brick); font-style:italic; }
+  footer .sub{ color:var(--cream-dim); margin-bottom:34px; }
+  .foot-bottom{
+    margin-top:70px;
+    padding-top:24px;
+    border-top:1px solid rgba(242,232,216,0.08);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+    font-size:0.8rem;
+    color:var(--cream-dim);
+    font-family:var(--mono);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .oven-glow, .ember, .scroll-cue .line{ animation:none; }
+  }
+
+  :focus-visible{ outline:2px solid var(--gold); outline-offset:3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="brand">Forno <span>Rosa</span></div>
+    <div class="nav-links">
+      <ul>
+        <li><a href="#story">Story</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#visit">Visit</a></li>
+      </ul>
+      <a class="nav-cta" href="#visit">Reserve</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="oven-glow"></div>
+  <div class="embers" id="embers"></div>
+  <div class="hero-inner wrap">
+    <div class="eyebrow">Neighborhood wood-fired kitchen — est. 2016</div>
+    <h1 class="wordmark">Forno<em>Rosa</em></h1>
+    <p class="hero-sub">One oven, four hundred degrees, and a dough that's been resting since yesterday. Pizza and small plates, cooked the slow way, served the same night.</p>
+    <div class="hero-ctas">
+      <a class="btn-primary" href="#menu">View the menu</a>
+      <a class="btn-secondary" href="#visit">Reserve a table</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span class="line"></span>Scroll</div>
+</section>
+
+<section class="section" id="story">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>The oven does the talking</h2>
+      <span class="section-tag">Since 2016</span>
+    </div>
+    <div class="story">
+      <div>
+        <p class="lede">A single wood-fired oven, built by hand, never turned off.</p>
+        <p>Forno Rosa started as a wood oven in a courtyard and a short list of things worth cooking in it. We still keep it that way: a tight menu, dough proofed for a full day, and a fire that's been burning since the doors opened.</p>
+        <p>No shortcuts, no reheats. If the oven's not ready, the kitchen's not open — that's the whole philosophy, and it hasn't changed.</p>
+      </div>
+      <div class="oven-illustration" aria-hidden="true">
+        <svg viewBox="0 0 300 220" width="80%">
+          <defs>
+            <radialGradient id="fireGrad" cx="50%" cy="80%" r="60%">
+              <stop offset="0%" stop-color="#D9A441"/>
+              <stop offset="45%" stop-color="#B33F30"/>
+              <stop offset="100%" stop-color="#1C1815" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <ellipse cx="150" cy="150" rx="130" ry="60" fill="#0F0D0B"/>
+          <path d="M60 150 Q60 40 150 40 Q240 40 240 150 Z" fill="#241F1B" stroke="#4A5240" stroke-width="2"/>
+          <ellipse cx="150" cy="150" rx="95" ry="42" fill="url(#fireGrad)"/>
+          <path d="M120 165 Q130 120 150 150 Q170 110 185 160 Q195 130 205 155" stroke="#D9A441" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.85"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="menu" style="background:var(--char-2);">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Tonight's menu</h2>
+      <span class="section-tag">Changes with the season</span>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-cat">
+        <h3>Antipasti</h3>
+        <div class="menu-item">
+          <div><span class="name">Burrata, roasted grapes</span><span class="desc">Charred sourdough, aged balsamic</span></div>
+          <div class="filler"></div>
+          <span class="price">$14</span>
+        </div>
+        <div class="menu-item">
+          <div><span class="name">Grilled octopus</span><span class="desc">White beans, calabrian chili oil</span></div>
+          <div class="filler"></div>
+          <span class="price">$18</span>
+        </div>
+        <div class="menu-item">
+          <div><span class="name">Fire-blistered peppers</span><span class="desc">Anchovy, garlic, lemon</span></div>
+          <div class="filler"></div>
+          <span class="price">$11</span>
+        </div>
+      </div>
+      <div class="menu-cat">
+        <h3>Pizze</h3>
+        <div class="menu-item">
+          <div><span class="name">Margherita</span><span class="desc">San marzano, fior di latte, basil</span></div>
+          <div class="filler"></div>
+          <span class="price">$17</span>
+        </div>
+        <div class="menu-item">
+          <div><span class="name">Nduja & honey</span><span class="desc">Calabrian sausage, ricotta, chili honey</span></div>
+          <div class="filler"></div>
+          <span class="price">$21</span>
+        </div>
+        <div class="menu-item">
+          <div><span class="name">Wild mushroom</span><span class="desc">Taleggio, thyme, truffle oil</span></div>
+          <div class="filler"></div>
+          <span class="price">$20</span>
+        </div>
+      </div>
+      <div class="menu-cat">
+        <h3>Dolci</h3>
+        <div class="menu-item">
+          <div><span class="name">Olive oil cake</span><span class="desc">Orange zest, mascarpone cream</span></div>
+          <div class="filler"></div>
+          <span class="price">$9</span>
+        </div>
+        <div class="menu-item">
+          <div><span class="name">Affogato</span><span class="desc">Espresso, vanilla gelato, amaretti</span></div>
+          <div class="filler"></div>
+          <span class="price">$8</span>
+        </div>
+      </div>
+      <div class="menu-cat">
+        <h3>Da bere</h3>
+        <div class="menu-item">
+          <div><span class="name">House chianti</span><span class="desc">Glass / bottle</span></div>
+          <div class="filler"></div>
+          <span class="price">$12 / $46</span>
+        </div>
+        <div class="menu-item">
+          <div><span class="name">Negroni</span><span class="desc">Classic, barrel-rested</span></div>
+          <div class="filler"></div>
+          <span class="price">$15</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="visit">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Find the oven</h2>
+      <span class="section-tag">Open Tue–Sun</span>
+    </div>
+    <div class="info">
+      <div class="info-card">
+        <h4>Hours</h4>
+        <div class="row"><span>Tue–Thu</span><span>5:00 – 10:00pm</span></div>
+        <div class="row"><span>Fri–Sat</span><span>5:00 – 11:00pm</span></div>
+        <div class="row"><span>Sunday</span><span>4:00 – 9:00pm</span></div>
+        <div class="row"><span>Monday</span><span>Closed</span></div>
+      </div>
+      <div class="info-card">
+        <h4>Location</h4>
+        <p>214 Kiln Street<br>Ahmedabad, Gujarat</p>
+        <p>Street parking after 6pm. Two tables held nightly for walk-ins.</p>
+      </div>
+      <div class="info-card">
+        <h4>Contact</h4>
+        <p>+91 98765 43210</p>
+        <p>hello@fornorosa.example</p>
+        <p>Private events by request.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <h2>Come find a <em>table</em></h2>
+    <p class="sub">We hold walk-ins every night, but a call ahead means the oven's ready when you are.</p>
+    <a class="btn-primary" href="tel:+919876543210">Call to reserve</a>
+    <div class="foot-bottom">
+      <span>Forno Rosa © 2026</span>
+      <span>214 Kiln Street, Ahmedabad</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const emberContainer = document.getElementById('embers');
+  const emberCount = 18;
+  for(let i=0;i<emberCount;i++){
+    const e = document.createElement('div');
+    e.className = 'ember';
+    const left = 30 + Math.random()*40;
+    e.style.left = left + '%';
+    e.style.setProperty('--drift', (Math.random()*40-20) + 'px');
+    e.style.animationDelay = (Math.random()*7) + 's';
+    e.style.animationDuration = (5 + Math.random()*3) + 's';
+    emberContainer.appendChild(e);
+  }
+</script>
+
+</body>
+</html>
